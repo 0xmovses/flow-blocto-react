@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components'
 import Authenticate from './components/Authenticate';
-
+import { Provider } from 'react-redux';
+import store from './store/configureStore';
 import GetLatestBlock from './components/GetLatestBlock'
 
 const Wrapper = styled.div`
@@ -11,10 +12,12 @@ const Wrapper = styled.div`
 
 function App() {
   return (
-    <Wrapper>
-      <GetLatestBlock />
-      <Authenticate />
-    </Wrapper>
+    <Provider store={store}>
+      <Wrapper>
+        <GetLatestBlock />
+        <Authenticate />
+      </Wrapper>
+    </Provider>
   );
 }
 

@@ -1,17 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type TPayload = {
-  email: string;
-};
-
 export const profileSlice = createSlice({
   name: "profile",
   initialState: {
     email: "",
   },
   reducers: {
-    changeEmail: (state, { payload }: PayloadAction<TPayload>) => {
-      state.email = payload.email;
+    changeEmail: (state, action: PayloadAction<string>) => {
+      state.email = action.payload;
     },
   },
 });

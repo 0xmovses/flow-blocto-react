@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useAppSelector, useAppDispatch } from "../hooks/store";
+import { setLatestBlock } from '../store/reducers/transactionSlice'
 const fcl: any = require("@onflow/fcl");
 
 const Card = styled.div`
@@ -44,19 +46,28 @@ interface BlockData {
 }
 
 const GetLatestBlock = () => {
-  const [data, setData] = useState<BlockData | null >();
-
+  const [data, setData] = useState<BlockData | null>();
+  const dispatch = useAppDispatch();
+  const latestBlock = useAppSelector((state) => state.rootReducer.transaction.latestBlock)
   const runGetLatestBlock = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
 
     const response = await fcl.send([fcl.getLatestBlock()]);
-
-    setData(await fcl.decode(response));
+    const flowData = await await fcl.decode(response)
+    setData(flowData);
+    dispatch(setLatestBlock(flowData.id));
   };
 
   return (
     <Card>
-      <button onClick={(event: React.MouseEvent<HTMLElement>) => runGetLatestBlock}>Get Latest Block</button>
+    <p>{JSON.stringify(latestBlock)}</p>
+      <button
+        onClick={(event: React.MouseEvent<HTMLElement>) =>
+          runGetLatestBlock(event)
+        }
+      >
+        Get Latest Block
+      </button>
       {data && <Code>{JSON.stringify(data, null, 2)}</Code>}
     </Card>
   );
